@@ -1,0 +1,25 @@
+---
+- hosts: web
+  become: yes
+  
+  tasks:
+
+  - name: install nginx
+    yum: name=nginx state=installed update_cache=yes
+
+  - name: write our nginx.conf
+    template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+    notify: restart nginx
+
+  - name: deploy website content
+    git: repo=https://github.com/jweissig/episode-47.git
+         dest=/usr/share/nginx/html/
+         version=release-0.01
+
+  - name: start ntp
+    service: name=nginx state=started
+
+  handlers:
+
+  - name: restart nginx
+    service: name=nginx state=restarted

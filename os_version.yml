@@ -1,0 +1,4 @@
+---
+- hosts: local
+  tasks:
+   - debug: msg="the server os is {{ansible_distribution}}-{{ansible_distribution_major_version}}"
